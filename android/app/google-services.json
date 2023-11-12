@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "608573766927",
+    "firebase_url": "https://ussiworkphonebook-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "ussiworkphonebook",
+    "storage_bucket": "ussiworkphonebook.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608573766927:android:61576d33655128c116127a",
+        "android_client_info": {
+          "package_name": "com.maicovich.work_phone_book"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGdwU9O-RRFTxNPEA7dZ55cXyFar4Zgzg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
