@@ -1,4 +1,4 @@
-import 'package:phone_book/models/models.dart';
+import 'package:phone_book/core/models/models.dart';
 
 class Employee {
   final String id;

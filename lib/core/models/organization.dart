@@ -1,4 +1,4 @@
-import 'package:phone_book/models/drift_database.dart';
+import 'package:phone_book/core/models/drift_database.dart';
 import 'package:uuid/uuid.dart';
 
 class Organization {

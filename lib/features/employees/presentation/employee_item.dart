@@ -1,9 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:phone_book/models/models.dart';
-import 'package:phone_book/presentation/edit_screen/edit_employee_screen.dart';
-import 'package:phone_book/presentation/edit_screen/phone_item.dart';
-import 'package:phone_book/services/drift_service.dart';
+import 'package:phone_book/core/models/models.dart';
+import 'package:phone_book/features/edit_employee/presentation/edit_employee_screen.dart';
+import 'package:phone_book/core/presentation/phone_item.dart';
+import 'package:phone_book/core/services/drift_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EmployeeItem extends StatelessWidget {
@@ -14,11 +16,11 @@ class EmployeeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: ListTile(
-        leading: Icon(Icons.person),
+        leading: const Icon(Icons.person),
         title: Text(employee.firstName),
         subtitle: Text('${employee.name} ${employee.lastName}'),
         trailing: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.call,
             color: Colors.green,
           ),
@@ -28,11 +30,11 @@ class EmployeeItem extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (context) => SimpleDialog(
-                  title: Text(
+                  title: const Text(
                     'Выберите телефон',
                     textAlign: TextAlign.center,
                   ),
-                  contentPadding: EdgeInsets.all(16),
+                  contentPadding: const EdgeInsets.all(16),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
                   children: phones

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:phone_book/models/models.dart';
+import 'package:phone_book/core/models/models.dart';
 
 class FirebaseRepository {
   CollectionReference<Organization> organizationCollection = FirebaseFirestore

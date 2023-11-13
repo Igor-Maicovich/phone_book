@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:phone_book/models/models.dart';
-import 'package:phone_book/presentation/employees_screen/employee_item.dart';
-import 'package:phone_book/presentation/main_screen/phone_appbar.dart';
-import 'package:phone_book/services/drift_service.dart';
+import 'package:phone_book/core/models/models.dart';
+import 'package:phone_book/core/presentation/phone_appbar.dart';
+import 'package:phone_book/features/employees/presentation/employee_item.dart';
+import 'package:phone_book/core/services/drift_service.dart';
 
 class EmployeesScreen extends StatefulWidget {
   final Organization organization;
@@ -18,7 +18,7 @@ class EmployeesScreenState extends State<EmployeesScreen> {
     return Scaffold(
       appBar: PhoneAppBar(title: widget.organization.name),
       backgroundColor: Colors.white,
-      body: FutureBuilder(
+      body: FutureBuilder<List<Employee>>(
         future: DriftService().selectEmploeeys(widget.organization.id),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:phone_book/models/phone.dart';
-import 'package:phone_book/presentation/edit_screen/app_save_button.dart';
-import 'package:phone_book/presentation/edit_screen/app_textfiled.dart';
+import 'package:phone_book/core/models/models.dart';
+import 'package:phone_book/core/presentation/app_save_button.dart';
+import 'package:phone_book/core/presentation/app_textfiled.dart';
 
 class AddPhoneBottomSheet extends StatefulWidget {
   final Phone? phone;
@@ -16,10 +16,10 @@ class AddPhoneBottomSheetState extends State<AddPhoneBottomSheet> {
   late FocusNode focusNode;
 
   List<String> variants = [
-    'мобильный',
-    'рабочий',
-    'служебный',
-    'другое',
+    'Мобильный',
+    'Рабочий',
+    'Служебный',
+    'Другое',
   ];
 
   @override

@@ -14,7 +14,7 @@ class PhoneAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       leading: backAction
           ? GestureDetector(
-              child: Icon(
+              child: const Icon(
                 Icons.chevron_left_outlined,
                 color: Colors.black,
               ),
@@ -27,7 +27,7 @@ class PhoneAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       title: Text(
         title,
-        style: TextStyle(color: Colors.black),
+        style: const TextStyle(color: Colors.black),
       ),
     );
   }

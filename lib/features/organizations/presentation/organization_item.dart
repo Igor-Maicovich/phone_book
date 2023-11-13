@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:phone_book/models/models.dart';
-import 'package:phone_book/presentation/employees_screen/employees_screen.dart';
+import 'package:phone_book/core/models/models.dart';
+import 'package:phone_book/features/employees/presentation/employees_screen.dart';
 
 class OrganizationItem extends StatelessWidget {
   final Organization organization;

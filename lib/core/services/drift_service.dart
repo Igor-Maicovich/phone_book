@@ -1,4 +1,4 @@
-import 'package:phone_book/models/models.dart';
+import 'package:phone_book/core/models/models.dart';
 
 class DriftService {
   AppDatabase db = AppDatabase();
@@ -54,7 +54,8 @@ class DriftService {
     // return responseDb.map((emp) => Employee.fromDrift(emp)).toList();
   }
 
-  Future<List<Phone>> selectPhones(String id) async {
+  Future<List<Phone>> selectPhones(String? id) async {
+    if (id == null) return [];
     var list = const [
       Phone(
           id: 'p100',

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:phone_book/presentation/main_screen/main_screen.dart';
+import 'package:phone_book/features/organizations/presentation/organizations_screen.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -10,8 +10,9 @@ class App extends StatelessWidget {
     SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
     );
-    return MaterialApp(
-      home: Mainscreen(),
+    return const MaterialApp(
+      title: 'Справочник',
+      home: OrganizationScreen(),
     );
   }
 }

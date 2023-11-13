@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phone_book/models/models.dart';
+import 'package:phone_book/core/models/models.dart';
 
 class PhoneItem extends StatelessWidget {
   final Phone phone;
