@@ -44,4 +44,21 @@ class Phone {
         number: number,
         description: description,
       );
+
+  Phone copyWith({
+    String? id,
+    String? employeeId,
+    String? number,
+    String? description,
+  }) =>
+      Phone(
+        id: id ?? this.id,
+        employeeId: employeeId ?? this.employeeId,
+        number: number ?? this.number,
+        description: description ?? this.description,
+      );
+
+  @override
+  String toString() =>
+      '{id:$id, employeeId:$employeeId, number:$number, description:$description}';
 }

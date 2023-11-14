@@ -1,5 +1,4 @@
 import 'package:phone_book/core/models/drift_database.dart';
-import 'package:uuid/uuid.dart';
 
 class Organization {
   final String id;
@@ -12,7 +11,7 @@ class Organization {
 
   Organization.empty()
       : this(
-          id: const Uuid().v4(),
+          id: '',
           name: '',
         );
 
@@ -37,7 +36,7 @@ class Organization {
 
   OrganizationsTableData toDrift() => OrganizationsTableData(
         id: id,
-        name: name,
+        name: name.toLowerCase(),
       );
 
   Organization copyWith({
@@ -48,4 +47,9 @@ class Organization {
         id: id ?? this.id,
         name: name ?? this.name,
       );
+
+  bool isValid() => id.isNotEmpty && name.isNotEmpty;
+
+  @override
+  String toString() => '{id:$id, name:$name}';
 }

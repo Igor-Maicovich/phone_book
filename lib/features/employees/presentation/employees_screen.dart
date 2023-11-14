@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:phone_book/core/models/models.dart';
 import 'package:phone_book/core/presentation/phone_appbar.dart';
+import 'package:phone_book/features/employees/employee_store.dart';
 import 'package:phone_book/features/employees/presentation/employee_item.dart';
-import 'package:phone_book/core/services/drift_service.dart';
 
 class EmployeesScreen extends StatefulWidget {
   final Organization organization;
@@ -13,23 +14,22 @@ class EmployeesScreen extends StatefulWidget {
 }
 
 class EmployeesScreenState extends State<EmployeesScreen> {
+  EmployeeStore store = EmployeeStore.shared;
+  @override
+  void initState() {
+    store.getEmployees(widget.organization.id);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PhoneAppBar(title: widget.organization.name),
       backgroundColor: Colors.white,
-      body: FutureBuilder<List<Employee>>(
-        future: DriftService().selectEmploeeys(widget.organization.id),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return ListView(
-              children: snapshot.data!.map((e) => EmployeeItem(e)).toList(),
-            );
-          }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+      body: Observer(
+        builder: (context) => ListView(
+          children: store.employees.map((e) => EmployeeItem(e)).toList(),
+        ),
       ),
     );
   }

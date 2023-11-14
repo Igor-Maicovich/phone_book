@@ -64,4 +64,8 @@ class Employee {
         jobTitle: jobTitle,
         description: description,
       );
+
+  @override
+  String toString() =>
+      '{id:$id, organizationId:$organizationId, name:$name, firstName:$firstName, lastName:$lastName, jobTitle:$jobTitle, description:$description}';
 }

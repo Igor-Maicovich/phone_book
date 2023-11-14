@@ -20,7 +20,7 @@ class PhoneItem extends StatelessWidget {
           children: [
             Text(
               phone.description,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.grey,
                 fontSize: 14,
               ),
@@ -28,7 +28,7 @@ class PhoneItem extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               phone.number,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black,
                 fontSize: 20,
               ),
