@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phone_book/core/models/models.dart';
+import 'package:phone_book/features/edit_employee/edit_employee_store.dart';
 
 class PhoneItem extends StatelessWidget {
   final Phone phone;
@@ -12,26 +13,34 @@ class PhoneItem extends StatelessWidget {
       onTap: onTap,
       child: SizedBox(
         height: 72,
-        width: MediaQuery.of(context).size.width * 0.5,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
+        child: Row(
           children: [
-            Text(
-              phone.description,
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    phone.description,
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    phone.number,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              phone.number,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              ),
+            IconButton(
+              onPressed: () => EmployeeEditStore.shared.deletePhone(phone),
+              icon: Icon(Icons.delete_outline),
             ),
           ],
         ),

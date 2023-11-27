@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:phone_book/core/models/models.dart';
-import 'package:phone_book/core/services/drift_service.dart';
+import 'package:phone_book/core/repository/drift_repository.dart';
 import 'package:uuid/uuid.dart';
 
 part 'edit_employee_store.g.dart';
@@ -9,19 +9,7 @@ part 'edit_employee_store.g.dart';
 class EmployeeEditStore extends _EmployeeEditStore with _$EmployeeEditStore {
   static EmployeeEditStore get shared => GetIt.I.get<EmployeeEditStore>();
 
-  Future<EmployeeEditStore> init(Employee? emp) async {
-    await getPhones(emp?.id);
-    await getOrganizations();
-    selectedOrg = organizations.firstWhere(
-      (org) => org.id == emp?.organizationId,
-      orElse: () => Organization.empty(),
-    );
-    id = emp?.id ?? const Uuid().v4();
-    name = emp?.name ?? '';
-    firstName = emp?.firstName ?? '';
-    lastName = emp?.lastName ?? '';
-    jobTitle = emp?.jobTitle ?? '';
-    description = emp?.description ?? '';
+  Future<EmployeeEditStore> init() async {
     return this;
   }
 }
@@ -58,21 +46,36 @@ abstract class _EmployeeEditStore with Store {
   Organization selectedOrg = Organization.empty();
 
   @action
+  Future<void> getData(Employee? emp) async {
+    await getPhones(emp?.id);
+    await getOrganizations();
+    selectedOrg = organizations.firstWhere(
+      (org) => org.id == emp?.organizationId,
+      orElse: () => Organization.empty(),
+    );
+    id = emp?.id ?? const Uuid().v4();
+    name = emp?.name ?? '';
+    firstName = emp?.firstName ?? '';
+    lastName = emp?.lastName ?? '';
+    jobTitle = emp?.jobTitle ?? '';
+    description = emp?.description ?? '';
+  }
+
+  @action
   Future<void> getPhones(String? id) async {
-    phones = ObservableList.of(await DriftService().selectPhones(id));
+    phones = ObservableList.of(await DriftRepository.shared.getPhones(id));
   }
 
   @action
   Future<void> getOrganizations() async {
-    organizations = ObservableList.of(
-      await DriftService().selectOrganizations(),
-    );
+    organizations =
+        ObservableList.of(await DriftRepository.shared.getOrganizations());
   }
 
   @action
   void setOrganization(String? value) {
     selectedOrg = organizations.firstWhere(
-      (org) => org.name == name.toLowerCase(),
+      (org) => org.name == value?.toLowerCase(),
       orElse: () => Organization(id: const Uuid().v4(), name: value ?? ''),
     );
   }
@@ -112,11 +115,16 @@ abstract class _EmployeeEditStore with Store {
   }
 
   @action
+  void deletePhone(Phone phone) {
+    phones.remove(phone);
+  }
+
+  @action
   Future<void> saveEmployee() async {
     if (_employeeValid()) {
-      await DriftService().insertOrganization(selectedOrg);
-      await DriftService().insertEmployee(
-        Employee(
+      DriftRepository.shared.saveEmployee(
+        organization: selectedOrg,
+        employee: Employee(
           id: id,
           organizationId: selectedOrg.id,
           name: name,
@@ -125,10 +133,8 @@ abstract class _EmployeeEditStore with Store {
           jobTitle: jobTitle,
           description: description,
         ),
+        phones: phones.map((phone) => phone.copyWith(employeeId: id)).toList(),
       );
-      for (var phone in phones) {
-        await DriftService().insertPhone(phone.copyWith(employeeId: id));
-      }
     }
   }
 

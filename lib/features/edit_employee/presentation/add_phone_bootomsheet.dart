@@ -98,15 +98,16 @@ class AddPhoneBottomSheetState extends State<AddPhoneBottomSheet> {
             labelText: 'Номер',
             keyboardType: TextInputType.number,
           ),
-          AppSaveButton(
-            onTap: () => store.setPhone(
+          AppSaveButton(onTap: () {
+            store.setPhone(
               Phone(
                   id: widget.phone?.id ?? const Uuid().v4(),
                   employeeId: '',
                   number: numberController.text,
                   description: descriptionController.text),
-            ),
-          ),
+            );
+            Navigator.maybePop(context);
+          }),
           SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
         ],
       ),

@@ -31,6 +31,7 @@ class AppTextEditField extends StatelessWidget {
         controller: controller,
         focusNode: focusNode,
         onFieldSubmitted: onFieldSubmitted,
+        onChanged: onFieldSubmitted,
         decoration: InputDecoration(
           labelText: labelText,
           border: OutlineInputBorder(

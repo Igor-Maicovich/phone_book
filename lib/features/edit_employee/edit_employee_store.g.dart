@@ -168,6 +168,14 @@ mixin _$EmployeeEditStore on _EmployeeEditStore, Store {
     });
   }
 
+  late final _$getDataAsyncAction =
+      AsyncAction('_EmployeeEditStore.getData', context: context);
+
+  @override
+  Future<void> getData(Employee? emp) {
+    return _$getDataAsyncAction.run(() => super.getData(emp));
+  }
+
   late final _$getPhonesAsyncAction =
       AsyncAction('_EmployeeEditStore.getPhones', context: context);
 
@@ -190,6 +198,97 @@ mixin _$EmployeeEditStore on _EmployeeEditStore, Store {
   @override
   Future<void> saveEmployee() {
     return _$saveEmployeeAsyncAction.run(() => super.saveEmployee());
+  }
+
+  late final _$_EmployeeEditStoreActionController =
+      ActionController(name: '_EmployeeEditStore', context: context);
+
+  @override
+  void setOrganization(String? value) {
+    final _$actionInfo = _$_EmployeeEditStoreActionController.startAction(
+        name: '_EmployeeEditStore.setOrganization');
+    try {
+      return super.setOrganization(value);
+    } finally {
+      _$_EmployeeEditStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setName(String? value) {
+    final _$actionInfo = _$_EmployeeEditStoreActionController.startAction(
+        name: '_EmployeeEditStore.setName');
+    try {
+      return super.setName(value);
+    } finally {
+      _$_EmployeeEditStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setFirstName(String? value) {
+    final _$actionInfo = _$_EmployeeEditStoreActionController.startAction(
+        name: '_EmployeeEditStore.setFirstName');
+    try {
+      return super.setFirstName(value);
+    } finally {
+      _$_EmployeeEditStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setLastName(String? value) {
+    final _$actionInfo = _$_EmployeeEditStoreActionController.startAction(
+        name: '_EmployeeEditStore.setLastName');
+    try {
+      return super.setLastName(value);
+    } finally {
+      _$_EmployeeEditStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setJobTitle(String? value) {
+    final _$actionInfo = _$_EmployeeEditStoreActionController.startAction(
+        name: '_EmployeeEditStore.setJobTitle');
+    try {
+      return super.setJobTitle(value);
+    } finally {
+      _$_EmployeeEditStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setDescription(String? value) {
+    final _$actionInfo = _$_EmployeeEditStoreActionController.startAction(
+        name: '_EmployeeEditStore.setDescription');
+    try {
+      return super.setDescription(value);
+    } finally {
+      _$_EmployeeEditStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setPhone(Phone phone) {
+    final _$actionInfo = _$_EmployeeEditStoreActionController.startAction(
+        name: '_EmployeeEditStore.setPhone');
+    try {
+      return super.setPhone(phone);
+    } finally {
+      _$_EmployeeEditStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void deletePhone(Phone phone) {
+    final _$actionInfo = _$_EmployeeEditStoreActionController.startAction(
+        name: '_EmployeeEditStore.deletePhone');
+    try {
+      return super.deletePhone(phone);
+    } finally {
+      _$_EmployeeEditStoreActionController.endAction(_$actionInfo);
+    }
   }
 
   @override

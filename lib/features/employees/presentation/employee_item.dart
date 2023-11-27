@@ -3,9 +3,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:phone_book/core/models/models.dart';
+import 'package:phone_book/core/repository/drift_repository.dart';
+import 'package:phone_book/features/edit_employee/edit_employee_store.dart';
 import 'package:phone_book/features/edit_employee/presentation/edit_employee_screen.dart';
 import 'package:phone_book/core/presentation/phone_item.dart';
-import 'package:phone_book/core/services/drift_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EmployeeItem extends StatelessWidget {
@@ -25,7 +26,8 @@ class EmployeeItem extends StatelessWidget {
             color: Colors.green,
           ),
           onPressed: () async {
-            List<Phone> phones = await DriftService().selectPhones(employee.id);
+            List<Phone> phones =
+                await DriftRepository.shared.getPhones(employee.id);
             if (phones.length > 1) {
               showDialog(
                 context: context,
@@ -53,7 +55,8 @@ class EmployeeItem extends StatelessWidget {
           },
         ),
       ),
-      onTap: () {
+      onTap: () async {
+        await EmployeeEditStore.shared.getData(employee);
         Navigator.push(
             context,
             CupertinoPageRoute(

@@ -33,6 +33,15 @@ mixin _$OrganizationStore on _OrganizationStore, Store {
     return _$getOrganizationsAsyncAction.run(() => super.getOrganizations());
   }
 
+  late final _$deleteOrganizationAsyncAction =
+      AsyncAction('_OrganizationStore.deleteOrganization', context: context);
+
+  @override
+  Future<void> deleteOrganization(Organization organization) {
+    return _$deleteOrganizationAsyncAction
+        .run(() => super.deleteOrganization(organization));
+  }
+
   @override
   String toString() {
     return '''

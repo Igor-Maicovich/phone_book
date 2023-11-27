@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:phone_book/core/models/models.dart';
@@ -7,6 +8,7 @@ import 'package:phone_book/core/presentation/app_save_button.dart';
 import 'package:phone_book/core/presentation/app_textfiled.dart';
 import 'package:phone_book/core/presentation/phone_item.dart';
 import 'package:phone_book/core/presentation/phone_appbar.dart';
+import 'package:phone_book/features/employees/employee_store.dart';
 
 class EmployeeEditScreen extends StatefulWidget {
   final Employee? employee;
@@ -17,7 +19,6 @@ class EmployeeEditScreen extends StatefulWidget {
 }
 
 class EmployeeEditScreenState extends State<EmployeeEditScreen> {
-  EmployeeEditStore editStore = EmployeeEditStore.shared;
   late FocusNode focusNode;
   late TextEditingController nameController,
       firsrNameController,
@@ -27,16 +28,19 @@ class EmployeeEditScreenState extends State<EmployeeEditScreen> {
       descriptionController;
 
   @override
-  void initState() async {
-    await editStore.init(widget.employee);
+  void initState() {
     focusNode = FocusNode();
-    nameController = TextEditingController(text: editStore.name);
-    firsrNameController = TextEditingController(text: editStore.firstName);
-    lastNameController = TextEditingController(text: editStore.lastName);
-    orgController = TextEditingController(text: editStore.selectedOrg.name);
-    jobTitleController = TextEditingController(text: editStore.jobTitle);
-    descriptionController = TextEditingController(text: editStore.description);
-
+    nameController = TextEditingController(text: EmployeeEditStore.shared.name);
+    firsrNameController =
+        TextEditingController(text: EmployeeEditStore.shared.firstName);
+    lastNameController =
+        TextEditingController(text: EmployeeEditStore.shared.lastName);
+    orgController =
+        TextEditingController(text: EmployeeEditStore.shared.selectedOrg.name);
+    jobTitleController =
+        TextEditingController(text: EmployeeEditStore.shared.jobTitle);
+    descriptionController =
+        TextEditingController(text: EmployeeEditStore.shared.description);
     super.initState();
   }
 
@@ -55,7 +59,20 @@ class EmployeeEditScreenState extends State<EmployeeEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PhoneAppBar(title: widget.employee?.firstName ?? 'Создать'),
+      appBar: PhoneAppBar(
+        title: widget.employee?.firstName ?? 'Создать',
+        actions: widget.employee != null
+            ? [
+                IconButton(
+                  onPressed: () => _showDeleteDialog(context, widget.employee!),
+                  icon: const Icon(
+                    Icons.delete_outline_rounded,
+                    color: Colors.black,
+                  ),
+                ),
+              ]
+            : [],
+      ),
       body: Observer(
         builder: (context) => ListView(
           padding: const EdgeInsets.all(32),
@@ -63,7 +80,7 @@ class EmployeeEditScreenState extends State<EmployeeEditScreen> {
             RawAutocomplete<String>(
               optionsBuilder: (value) {
                 if (value.text.isEmpty) return [];
-                return editStore.organizations
+                return EmployeeEditStore.shared.organizations
                     .map((org) => org.name)
                     .toList()
                     .where((name) => name.toLowerCase().contains(
@@ -91,7 +108,8 @@ class EmployeeEditScreenState extends State<EmployeeEditScreen> {
                   controller: orgController,
                   labelText: 'Организация',
                   autofocus: true,
-                  onFieldSubmitted: editStore.setOrganization,
+                  focusNode: focusNode,
+                  onFieldSubmitted: EmployeeEditStore.shared.setOrganization,
                 );
               },
               textEditingController: orgController,
@@ -100,19 +118,19 @@ class EmployeeEditScreenState extends State<EmployeeEditScreen> {
             AppTextEditField(
               controller: firsrNameController,
               labelText: 'Фамилия',
-              onFieldSubmitted: editStore.setFirstName,
+              onFieldSubmitted: EmployeeEditStore.shared.setFirstName,
             ),
             AppTextEditField(
               controller: nameController,
               labelText: 'Имя',
-              onFieldSubmitted: editStore.setName,
+              onFieldSubmitted: EmployeeEditStore.shared.setName,
             ),
             AppTextEditField(
               controller: lastNameController,
               labelText: 'Отчество',
-              onFieldSubmitted: editStore.setLastName,
+              onFieldSubmitted: EmployeeEditStore.shared.setLastName,
             ),
-            ...editStore.phones
+            ...EmployeeEditStore.shared.phones
                 .map(
                   (p) => PhoneItem(
                     phone: p,
@@ -126,14 +144,17 @@ class EmployeeEditScreenState extends State<EmployeeEditScreen> {
             AppTextEditField(
               controller: jobTitleController,
               labelText: 'Должность',
-              onFieldSubmitted: editStore.setJobTitle,
+              onFieldSubmitted: EmployeeEditStore.shared.setJobTitle,
             ),
             AppTextEditField(
               controller: descriptionController,
               labelText: 'Примечание',
-              onFieldSubmitted: editStore.setDescription,
+              onFieldSubmitted: EmployeeEditStore.shared.setDescription,
             ),
-            AppSaveButton(onTap: () => editStore.saveEmployee()),
+            AppSaveButton(onTap: () {
+              EmployeeEditStore.shared.saveEmployee();
+              Navigator.maybePop(context);
+            }),
           ],
         ),
       ),
@@ -152,6 +173,33 @@ class EmployeeEditScreenState extends State<EmployeeEditScreen> {
         ),
       ),
       builder: (context) => AddPhoneBottomSheet(phone),
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context, Employee employee) {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: const Text('Удалить контакт?'),
+        actions: [
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            onPressed: () async {
+              Navigator.pop(context);
+              await EmployeeStore.shared.deleteEmployee(employee);
+              if (context.mounted) Navigator.maybePop(context);
+            },
+            child: const Text('Да'),
+          ),
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Нет'),
+          ),
+        ],
+      ),
     );
   }
 }

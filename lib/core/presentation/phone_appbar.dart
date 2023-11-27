@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class PhoneAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool backAction;
-  const PhoneAppBar({required this.title, this.backAction = true, super.key});
+  final List<Widget>? actions;
+  const PhoneAppBar(
+      {required this.title, this.backAction = true, this.actions, super.key});
 
   @override
   Size get preferredSize => const Size.fromHeight(56);
@@ -29,6 +31,7 @@ class PhoneAppBar extends StatelessWidget implements PreferredSizeWidget {
         title,
         style: const TextStyle(color: Colors.black),
       ),
+      actions: actions,
     );
   }
 }
