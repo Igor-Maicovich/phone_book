@@ -41,6 +41,22 @@ mixin _$EmployeeEditStore on _EmployeeEditStore, Store {
     });
   }
 
+  late final _$deletedPhonesAtom =
+      Atom(name: '_EmployeeEditStore.deletedPhones', context: context);
+
+  @override
+  ObservableList<Phone> get deletedPhones {
+    _$deletedPhonesAtom.reportRead();
+    return super.deletedPhones;
+  }
+
+  @override
+  set deletedPhones(ObservableList<Phone> value) {
+    _$deletedPhonesAtom.reportWrite(value, super.deletedPhones, () {
+      super.deletedPhones = value;
+    });
+  }
+
   late final _$idAtom = Atom(name: '_EmployeeEditStore.id', context: context);
 
   @override
@@ -192,6 +208,15 @@ mixin _$EmployeeEditStore on _EmployeeEditStore, Store {
     return _$getOrganizationsAsyncAction.run(() => super.getOrganizations());
   }
 
+  late final _$deleteEmployeeAsyncAction =
+      AsyncAction('_EmployeeEditStore.deleteEmployee', context: context);
+
+  @override
+  Future<void> deleteEmployee(Employee employee) {
+    return _$deleteEmployeeAsyncAction
+        .run(() => super.deleteEmployee(employee));
+  }
+
   late final _$saveEmployeeAsyncAction =
       AsyncAction('_EmployeeEditStore.saveEmployee', context: context);
 
@@ -296,6 +321,7 @@ mixin _$EmployeeEditStore on _EmployeeEditStore, Store {
     return '''
 organizations: ${organizations},
 phones: ${phones},
+deletedPhones: ${deletedPhones},
 id: ${id},
 name: ${name},
 firstName: ${firstName},

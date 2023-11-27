@@ -5,7 +5,13 @@ import 'package:phone_book/features/edit_employee/edit_employee_store.dart';
 class PhoneItem extends StatelessWidget {
   final Phone phone;
   final VoidCallback onTap;
-  const PhoneItem({super.key, required this.phone, required this.onTap});
+  final bool deleteAction;
+  const PhoneItem({
+    super.key,
+    required this.phone,
+    this.deleteAction = false,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +44,13 @@ class PhoneItem extends StatelessWidget {
                 ],
               ),
             ),
-            IconButton(
-              onPressed: () => EmployeeEditStore.shared.deletePhone(phone),
-              icon: Icon(Icons.delete_outline),
-            ),
+            deleteAction
+                ? IconButton(
+                    onPressed: () =>
+                        EmployeeEditStore.shared.deletePhone(phone),
+                    icon: const Icon(Icons.delete_outline),
+                  )
+                : const SizedBox.shrink(),
           ],
         ),
       ),

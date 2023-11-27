@@ -7,6 +7,7 @@ import 'package:phone_book/core/repository/drift_repository.dart';
 import 'package:phone_book/features/edit_employee/edit_employee_store.dart';
 import 'package:phone_book/features/edit_employee/presentation/edit_employee_screen.dart';
 import 'package:phone_book/core/presentation/phone_item.dart';
+import 'package:phone_book/features/employees/employee_store.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EmployeeItem extends StatelessWidget {
@@ -58,9 +59,13 @@ class EmployeeItem extends StatelessWidget {
       onTap: () async {
         await EmployeeEditStore.shared.getData(employee);
         Navigator.push(
-            context,
-            CupertinoPageRoute(
-                builder: (context) => EmployeeEditScreen(employee)));
+          context,
+          CupertinoPageRoute(
+            builder: (context) => EmployeeEditScreen(employee),
+          ),
+        ).then(
+          (value) => EmployeeStore.shared.getEmployees(employee.organizationId),
+        );
       },
     );
   }

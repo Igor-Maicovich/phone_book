@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:phone_book/core/models/models.dart';
 import 'package:phone_book/core/repository/drift_repository.dart';
+import 'package:phone_book/core/repository/firebase_repository.dart';
 import 'package:uuid/uuid.dart';
 
 part 'edit_employee_store.g.dart';
@@ -20,6 +21,9 @@ abstract class _EmployeeEditStore with Store {
 
   @observable
   ObservableList<Phone> phones = ObservableList<Phone>();
+
+  @observable
+  ObservableList<Phone> deletedPhones = ObservableList<Phone>();
 
   @observable
   String id = '';
@@ -107,6 +111,8 @@ abstract class _EmployeeEditStore with Store {
 
   @action
   void setPhone(Phone phone) {
+    if (phone.description.isEmpty) return;
+    if (phone.number.isEmpty) return;
     int index = phones.indexWhere((element) => element.id == phone.id);
     if (index >= 0) {
       phones.removeAt(index);
@@ -117,6 +123,14 @@ abstract class _EmployeeEditStore with Store {
   @action
   void deletePhone(Phone phone) {
     phones.remove(phone);
+    deletedPhones.add(phone);
+  }
+
+  @action
+  Future<void> deleteEmployee(Employee employee) async {
+    DriftRepository.shared.deleteEmployee(employee);
+    FirebaseRepository.shared.deleteEmployee(
+        employee: employee, phones: [...phones, ...deletedPhones]);
   }
 
   @action
@@ -134,6 +148,21 @@ abstract class _EmployeeEditStore with Store {
           description: description,
         ),
         phones: phones.map((phone) => phone.copyWith(employeeId: id)).toList(),
+        deletedPhones: deletedPhones,
+      );
+      FirebaseRepository.shared.saveEmployee(
+        organization: selectedOrg,
+        employee: Employee(
+          id: id,
+          organizationId: selectedOrg.id,
+          name: name,
+          firstName: firstName,
+          lastName: lastName,
+          jobTitle: jobTitle,
+          description: description,
+        ),
+        phones: phones.map((phone) => phone.copyWith(employeeId: id)).toList(),
+        deletedPhones: deletedPhones,
       );
     }
   }

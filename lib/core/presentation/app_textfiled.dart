@@ -7,6 +7,7 @@ class AppTextEditField extends StatelessWidget {
   final bool autofocus;
   final TextInputType? keyboardType;
   final FocusNode? focusNode;
+  final bool readOnly;
   final void Function(String?)? onFieldSubmitted;
   final String? Function(String?)? validator;
   final List<TextInputFormatter>? inputFormatters;
@@ -14,6 +15,7 @@ class AppTextEditField extends StatelessWidget {
     this.controller,
     required this.labelText,
     this.keyboardType,
+    this.readOnly = false,
     this.autofocus = false,
     this.validator,
     this.onFieldSubmitted,
@@ -27,7 +29,8 @@ class AppTextEditField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
-        autofocus: true,
+        readOnly: readOnly,
+        autofocus: autofocus,
         controller: controller,
         focusNode: focusNode,
         onFieldSubmitted: onFieldSubmitted,

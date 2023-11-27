@@ -22,9 +22,4 @@ abstract class _EmployeeStore with Store {
     employees =
         ObservableList.of(await DriftRepository.shared.getEmployees(id));
   }
-
-  @action
-  Future<void> deleteEmployee(Employee employee) async {
-    DriftRepository.shared.deleteEmployee(employee);
-  }
 }

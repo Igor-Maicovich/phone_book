@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppSaveButton extends StatelessWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   const AppSaveButton({
     super.key,
     required this.onTap,

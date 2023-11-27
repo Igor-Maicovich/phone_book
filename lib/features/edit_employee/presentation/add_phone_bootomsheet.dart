@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:phone_book/core/models/models.dart';
 import 'package:phone_book/core/presentation/app_save_button.dart';
 import 'package:phone_book/core/presentation/app_textfiled.dart';
@@ -16,7 +17,10 @@ class AddPhoneBottomSheet extends StatefulWidget {
 class AddPhoneBottomSheetState extends State<AddPhoneBottomSheet> {
   late TextEditingController descriptionController, numberController;
   late FocusNode focusNode;
-  EmployeeEditStore store = EmployeeEditStore.shared;
+  final MaskTextInputFormatter mobileFormatter = MaskTextInputFormatter(
+    mask: '# ### ###-##-##',
+    filter: {"#": RegExp(r'[0-9]')},
+  );
 
   List<String> variants = [
     'Мобильный',
@@ -85,7 +89,7 @@ class AddPhoneBottomSheetState extends State<AddPhoneBottomSheet> {
             ) {
               return AppTextEditField(
                 controller: descriptionController,
-                focusNode: focusNode,
+                focusNode: widget.phone == null ? focusNode : null,
                 autofocus: true,
                 labelText: 'Описание',
               );
@@ -97,17 +101,20 @@ class AddPhoneBottomSheetState extends State<AddPhoneBottomSheet> {
             controller: numberController,
             labelText: 'Номер',
             keyboardType: TextInputType.number,
+            inputFormatters: [mobileFormatter],
           ),
-          AppSaveButton(onTap: () {
-            store.setPhone(
-              Phone(
-                  id: widget.phone?.id ?? const Uuid().v4(),
-                  employeeId: '',
-                  number: numberController.text,
-                  description: descriptionController.text),
-            );
-            Navigator.maybePop(context);
-          }),
+          AppSaveButton(
+            onTap: () {
+              EmployeeEditStore.shared.setPhone(
+                Phone(
+                    id: widget.phone?.id ?? const Uuid().v4(),
+                    employeeId: '',
+                    number: numberController.text,
+                    description: descriptionController.text),
+              );
+              Navigator.maybePop(context);
+            },
+          ),
           SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
         ],
       ),

@@ -27,12 +27,16 @@ class DriftRepository {
     required Organization organization,
     required Employee employee,
     required List<Phone> phones,
+    required List<Phone> deletedPhones,
   }) async {
     return await db.transaction(() async {
       await db.updateOrganization(organization.toDrift());
       await db.updateEmployee(employee.toDrift());
       for (var phone in phones) {
         await db.updatePhone(phone.toDrift());
+      }
+      for (var delPhone in deletedPhones) {
+        await db.delete(db.phonesTable).delete(delPhone.toDrift());
       }
     });
   }

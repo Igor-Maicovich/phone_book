@@ -10,9 +10,10 @@ class App extends StatelessWidget {
     SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
     );
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Справочник',
-      home: OrganizationScreen(),
+      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+      home: const OrganizationScreen(),
     );
   }
 }

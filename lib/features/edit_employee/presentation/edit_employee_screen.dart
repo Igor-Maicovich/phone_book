@@ -8,7 +8,6 @@ import 'package:phone_book/core/presentation/app_save_button.dart';
 import 'package:phone_book/core/presentation/app_textfiled.dart';
 import 'package:phone_book/core/presentation/phone_item.dart';
 import 'package:phone_book/core/presentation/phone_appbar.dart';
-import 'package:phone_book/features/employees/employee_store.dart';
 
 class EmployeeEditScreen extends StatefulWidget {
   final Employee? employee;
@@ -95,9 +94,11 @@ class EmployeeEditScreenState extends State<EmployeeEditScreen> {
                       children: options
                           .map(
                             (e) => ListTile(
-                              title: Text(e),
-                              onTap: () => onSelected(e),
-                            ),
+                                title: Text(e),
+                                onTap: () {
+                                  onSelected(e);
+                                  EmployeeEditStore.shared.setOrganization(e);
+                                }),
                           )
                           .toList()),
                 );
@@ -106,9 +107,10 @@ class EmployeeEditScreenState extends State<EmployeeEditScreen> {
                   onFieldSubmitted) {
                 return AppTextEditField(
                   controller: orgController,
+                  readOnly: widget.employee != null,
                   labelText: 'Организация',
                   autofocus: true,
-                  focusNode: focusNode,
+                  focusNode: widget.employee == null ? focusNode : null,
                   onFieldSubmitted: EmployeeEditStore.shared.setOrganization,
                 );
               },
@@ -134,6 +136,7 @@ class EmployeeEditScreenState extends State<EmployeeEditScreen> {
                 .map(
                   (p) => PhoneItem(
                     phone: p,
+                    deleteAction: true,
                     onTap: () => _showBottomSheet(context, p),
                   ),
                 )
@@ -186,7 +189,7 @@ class EmployeeEditScreenState extends State<EmployeeEditScreen> {
             isDestructiveAction: true,
             onPressed: () async {
               Navigator.pop(context);
-              await EmployeeStore.shared.deleteEmployee(employee);
+              await EmployeeEditStore.shared.deleteEmployee(employee);
               if (context.mounted) Navigator.maybePop(context);
             },
             child: const Text('Да'),

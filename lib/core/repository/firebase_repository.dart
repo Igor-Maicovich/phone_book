@@ -38,46 +38,36 @@ class FirebaseRepository {
     return snapshot.docs.map((doc) => doc.data()).toList();
   }
 
-  Future<void> pushDataBase({
-    required List<Organization> orgs,
-    required List<Employee> emps,
+  Future<void> saveEmployee({
+    required Organization organization,
+    required Employee employee,
     required List<Phone> phones,
+    required List<Phone> deletedPhones,
   }) async {
     final batch = FirebaseFirestore.instance.batch();
-    //Удаление таблицы организаций
-    var orgSnapshot = await organizationCollection.get();
-    for (var org in orgSnapshot.docs) {
-      var ref = organizationCollection.doc(org.id);
-      batch.delete(ref);
-    }
-    //Запись таблицы организаций
-    for (var org in orgs) {
-      var ref = organizationCollection.doc(org.id);
-      batch.set(ref, org);
-    }
-    //Удаление таблицы сотрудников
-    var empSnapshot = await employeeCollection.get();
-    for (var emp in empSnapshot.docs) {
-      var ref = employeeCollection.doc(emp.id);
-      batch.delete(ref);
-    }
-    //Запись таблицы сотрудников
-    for (var emp in emps) {
-      var ref = employeeCollection.doc(emp.id);
-      batch.set(ref, emp);
-    }
-    //Удаление таблицы телефонов
-    var phoneSnapshot = await phoneCollection.get();
-    for (var phone in phoneSnapshot.docs) {
-      var ref = phoneCollection.doc(phone.id);
-      batch.delete(ref);
-    }
-    //Запись таблицы телефонов
+    var refOrg = organizationCollection.doc(organization.id);
+    batch.set(refOrg, organization);
+    var refEmp = employeeCollection.doc(employee.id);
+    batch.set(refEmp, employee);
     for (var phone in phones) {
       var ref = phoneCollection.doc(phone.id);
       batch.set(ref, phone);
     }
-    //Коммит изменений
+    for (var delPhone in deletedPhones) {
+      batch.delete(phoneCollection.doc(delPhone.id));
+    }
+    await batch.commit();
+  }
+
+  Future<void> deleteEmployee({
+    required Employee employee,
+    required List<Phone> phones,
+  }) async {
+    final batch = FirebaseFirestore.instance.batch();
+    batch.delete(employeeCollection.doc(employee.id));
+    for (var phone in phones) {
+      batch.delete(phoneCollection.doc(phone.id));
+    }
     await batch.commit();
   }
 }
